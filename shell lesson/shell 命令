@@ -1,0 +1,344 @@
+shell 命令
+1、#! /bin/bash #声明解释器类型
+2、echo "hello world" #输出字符串
+3、chmod +x ./test.sh #使脚本具有执行的权限
+4、执行方式为 ./Test.sh 或 /bin/sh test.sh
+5、获取stdin输入并赋值给PERSON变量,最后在stdout上输出
+	echo "What is your name?"
+	read RERSON
+	echo "Hello , $RERSON"
+6、myUrl="http://www.baidu.com" #定义变量
+   $myUrl 或 ${myUrl} #使用变量
+   #变量可以被重新定义
+   #变量属性:readonly
+   #变量删除:unset
+7、特殊变量
+	$0	当前脚本的文件名
+	$n	传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。
+	$#	传递给脚本或函数的参数个数。
+	$*	传递给脚本或函数的所有参数。
+	$@	传递给脚本或函数的所有参数。被双引号(" ")包含时，与 $* 稍有不同，下面将会讲到。
+	$?	上个命令的退出状态，或函数的返回值。
+	$$	当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。
+
+8、转义 echo -e  例如：echo -e "hello \n\n"
+	下面的转义字符都可以用在 echo 中：
+	转义字符	含义
+	\\	反斜杠
+	\a	警报，响铃
+	\b	退格（删除键）
+	\f	换页(FF)，将当前位置移到下页开头
+	\n	换行
+	\r	回车
+	\t	水平制表符（tab键） 
+	\v	垂直制表符
+	可以使用 echo 命令的 -E 选项禁止转义，默认也是不转义的；使用 -n 选项可以禁止插入换行符。
+9、#命令替换 `command` 命令替换是指Shell可以先执行命令，将输出结果暂时保存，在适当的地方输出。
+10、#变量替换
+	#变量替换可以根据变量的状态（是否为空、是否定义等）来改变它的值
+	可以使用的变量替换形式：
+	${var}	变量本来的值
+	${var:-word}	如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。
+	${var:=word}	如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。
+	${var:?message}	如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。
+	若此替换出现在Shell脚本中，那么脚本将停止运行。
+	${var:+word}	如果变量 var 被定义，那么返回 word，但不改变 var 的值。
+11、	shell 算数运算
+	例如:
+		val=`expr 2 + 2`
+		echo "total value : $val"
+	1,表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。
+	完整的表达式要被 ` ` 包含，注意这个字符不是常用的单引号，在 Esc 键下边。
+		算术运算符列表
+		运算符	说明	举例
+		+	加法	`expr $a + $b` 结果为 30。
+		-	减法	`expr $a - $b` 结果为 10。
+		*	乘法	`expr $a \* $b` 结果为  200。
+		/	除法	`expr $b / $a` 结果为 2。
+		%	取余	`expr $b % $a` 结果为 0。
+		=	赋值	a=$b 将把变量 b 的值赋给 a。
+		==	相等。用于比较两个数字，相同则返回 true。	[ $a == $b ] 返回 false。
+		!=	不相等。用于比较两个数字，不相同则返回 true。	[ $a != $b ] 返回 true。
+	注意：条件表达式要放在方括号之间，并且要有空格，例如 [$a==$b] 是错误的，必须写成 [ $a == $b ]。
+
+12、关系运算
+	关系运算符列表
+	-eq	检测两个数是否相等，相等返回 true。	[ $a -eq $b ] 返回 true。
+	-ne	检测两个数是否相等，不相等返回 true。	[ $a -ne $b ] 返回 true。
+	-gt	检测左边的数是否大于右边的，如果是，则返回 true。	[ $a -gt $b ] 返回 false。
+	-lt	检测左边的数是否小于右边的，如果是，则返回 true。	[ $a -lt $b ] 返回 true。
+	-ge	检测左边的数是否大等于右边的，如果是，则返回 true。	[ $a -ge $b ] 返回 false。
+	-le	检测左边的数是否小于等于右边的，如果是，则返回 true。	[ $a -le $b ] 返回 true。
+13、布尔运算
+	布尔运算符列表
+	!	非运算，表达式为 true 则返回 false，否则返回 true。	[ ! false ] 返回 true。
+	-o	或运算，有一个表达式为 true 则返回 true。	[ $a -lt 20 -o $b -gt 100 ] 返回 true。
+	-a	与运算，两个表达式都为 true 才返回 true。	[ $a -lt 20 -a $b -gt 100 ] 返回 false。
+
+14、字符串运算
+	字符串运算符列表
+	运算符	说明	举例
+	=	检测两个字符串是否相等，相等返回 true。	[ $a = $b ] 返回 false。
+	!=	检测两个字符串是否相等，不相等返回 true。	[ $a != $b ] 返回 true。
+	-z	检测字符串长度是否为0，为0返回 true。	[ -z $a ] 返回 false。
+	-n	检测字符串长度是否为0，不为0返回 true。	[ -z $a ] 返回 true。
+	str	检测字符串是否为空，不为空返回 true。	[ $a ] 返回 true。
+
+15、文件测试运算符
+	文件测试运算符列表
+	操作符	说明	举例
+	-b file	检测文件是否是块设备文件，如果是，则返回 true。	[ -b $file ] 返回 false。
+	-c file	检测文件是否是字符设备文件，如果是，则返回 true。	[ -b $file ] 返回 false。
+	-d file	检测文件是否是目录，如果是，则返回 true。	[ -d $file ] 返回 false。
+	-f file	检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。	[ -f $file ] 返回 true。
+	-g file	检测文件是否设置了 SGID 位，如果是，则返回 true。	[ -g $file ] 返回 false。
+	-k file	检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。	[ -k $file ] 返回 false。
+	-p file	检测文件是否是具名管道，如果是，则返回 true。	[ -p $file ] 返回 false。
+	-u file	检测文件是否设置了 SUID 位，如果是，则返回 true。	[ -u $file ] 返回 false。
+	-r file	检测文件是否可读，如果是，则返回 true。	[ -r $file ] 返回 true。
+	-w file	检测文件是否可写，如果是，则返回 true。	[ -w $file ] 返回 true。
+	-x file	检测文件是否可执行，如果是，则返回 true。	[ -x $file ] 返回 true。
+	-s file	检测文件是否为空（文件大小是否大于0），不为空返回 true。	[ -s $file ] 返回 true。
+	-e file	检测文件（包括目录）是否存在，如果是，则返回 true。	[ -e $file ] 返回 true。
+
+16、文件注释
+	以“#”开头的行就是注释，会被解释器忽略。
+	如果在开发过程中，遇到大段的代码需要临时注释起来，过一会儿又取消注释，怎么办呢？每一行加个#符号太费力了，可以把这一段要注释的代码用一对花括号括起来，定义成一个函数，没有地方调用这个函数，这块代码就不会执行，达到了和注释一样的效果。
+
+17、字符串
+	1、单引号字符串的限制：
+	单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+	单引号字串中不能出现单引号（对单引号使用转义符后也不行）。
+
+	2、双引号的优点：
+	双引号里可以有变量
+	双引号里可以出现转义字符
+
+	拼接字符串
+	your_name="qinjx"
+	greeting="hello, "$your_name" !"
+	greeting_1="hello, ${your_name} !"
+	echo $greeting $greeting_1
+
+	获取字符串长度
+	string="abcd"
+	echo ${#string} #输出 4
+
+	提取子字符串
+	string="alibaba is a great company"
+	echo ${string:1:4} #输出liba
+
+	查找子字符串
+	string="alibaba is a great company"
+	echo `expr index "$string" is`
+	
+	# 字符串拼接
+	echo ${name}${age}
+	# 字符串长度
+	echo ${#name} # 4
+	# substring
+	message="I want to be healthy"
+	echo ${message:2} # want to be health, 2是position
+	echo ${message:2:4} # want，2是position，4是len
+	# delete shortest match from front: ${string#substring}
+	echo ${message#*want}
+	# delete shortest match from back: ${string%substring}
+	echo ${message%healthy}
+	# delete longest match from front: ${string##substring}
+	echo ${message##*h}
+	# delete longest match from back: ${string%%substring}
+	echo ${message%%t*}
+	# find and replace: ${string/pattern/replacement}
+	book_name="Catch Eye Eye"
+	echo ${book_name/Eye/Cat}
+	# find and replace all match: ${string//pattern/replacement}
+	echo ${book_name//Eye/Cat}
+	file_path="/usr/local/bin"
+	# only replace when pattern match the beginning: ${string/#pattern/replacement}
+	echo ${file_path/#\/usr/tmp}
+	# only replace when pattern match the end: ${string/%pattern/replacement}
+	echo ${file_path/%bin/tmp}
+	# string index
+	stringZ=abcABC123ABCabc
+	echo `expr index "$stringZ" C12` # Mac OSX不支持expr
+
+18、数组
+	bash支持一维数组（不支持多维数组），并且没有限定数组的大小。类似与C语言，数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。
+	定义数组
+	array_name=(value0 value1 value2 value3)
+	$array_name[0]
+
+	echo ${array_name[*]}	#获取数组所有元素
+	echo ${array_name[@]}	#获取数组所有元素
+
+	echo ${#array_name[n]}	#获取单个长度
+	echo ${#array_name[*]}	#获取数组长度
+	echo ${#array_name[@]}	
+
+19、文本输出
+	echo "$name It is a test" #输出
+	echo "It is a test" > $myfile	#重定向到文本
+
+20、printf 
+	printf 命令用于格式化输出， 是echo命令的增强版。它是C语言printf()库函数的一个有限的变形，并且在语法上有些不同。
+	printf 命令的语法：
+	printf  format-string  [arguments...]
+
+21、if else 语句
+
+	if 语句通过关系运算符判断表达式的真假来决定执行哪个分支。Shell 有三种 if ... else 语句：
+	if ... fi 语句；
+	if ... else ... fi 语句；
+	if ... elif ... else ... fi 语句。
+
+22、case ... esac 与其他语言中的 switch ... case 语句类似，是一种多分枝选择结构。
+	case 值 in
+	模式1)
+	    command1
+	    command2
+	    command3
+	    ;;
+	模式2）
+	    command1
+	    command2
+	    command3
+	    ;;
+	*)
+	    command1
+	    command2
+	    command3
+	    ;;
+	
+23、与其他编程语言类似，Shell支持for循环。
+	for 变量 in 列表
+	do
+	    command1
+	    command2
+	    ...
+	    commandN
+	done
+
+	例如:
+	#.....
+	for var in 1 2 3 4 5 6
+	do
+		echo "$var"
+	done
+
+
+	for var in "1 2 3 4 5 6"
+	do
+		echo "$var"
+	done
+
+	for var in $HOME/.bash*
+	do
+		echo "$var"
+	done
+	#.....
+
+24、while 循环
+	while循环用于不断执行一系列命令，也用于从输入文件中读取数据；命令通常为测试条件。其格式为：
+	while command
+	do
+	   Statement(s) to be executed if command is true
+	done
+
+25、 until 
+	until 循环执行一系列命令直至条件为 true 时停止。until 循环与 while 循环在处理方式上刚好相反。一般while循环优于until循环，但在某些时候，也只是极少数情况下，until 循环更加有用。
+
+	until 循环格式为：
+	until command
+	do
+	   Statement(s) to be executed until command is true
+	done
+	command 一般为条件表达式，如果返回值为 false，则继续执行循环体内的语句，否则跳出循环。
+26、break
+	在循环过程中，有时候需要在未达到循环结束条件时强制跳出循环，像大多数编程语言一样，Shell也使用 break 和 continue 来跳出循环。
+	break命令
+
+27、Shell函数：Shell函数返回值、删除函数、在终端调用函数
+	函数可以让我们将一个复杂功能划分成若干模块，让程序结构更加清晰，代码重复利用率更高。像其他编程语言一样，Shell 也支持函数。Shell 函数必须先定义后使用。
+
+	Shell 函数的定义格式如下：
+	function_name () {
+	    list of commands
+	    [ return value ]
+	}
+
+	#函数调用
+	# funWithReturn(){
+	#     echo "The function is to get the sum of two numbers..."
+	#     echo -n "Input first number: "
+	#     read aNum
+	#     echo -n "Input another number: "
+	#     read anotherNum
+	#     echo "The two numbers are $aNum and $anotherNum !"
+	#     return $(($aNum+$anotherNum))
+	# }
+
+	# funWithReturn
+	# #capture value returnd by last command
+	# ret=$?
+	# echo "the sum of two numbers is $ret!"
+
+	#函数参数
+	# funWithReturn(){
+	#     echo "parament of The function…${0}”
+	# }
+	# funWithReturn 0
+
+28、Shell输入输出重定向：Shell Here Document，/dev/null文件
+	输出重定向
+	命令的输出不仅可以是显示器，还可以很容易的转移向到文件，这被称为输出重定向。
+	命令输出重定向的语法为：
+	$ command > file
+	这样，输出到显示器的内容就可以被重定向到文件。
+	who > users
+	cat users
+
+	输入重定向
+	和输出重定向一样，Unix 命令也可以从文件获取输入，语法为：
+	command < file
+	这样，本来需要从键盘获取输入的命令会转移到文件读取内容。
+	注意：输出重定向是大于号(>)，输入重定向是小于号(<)。
+	wc -l < users
+
+	全部可用的重定向命令列表
+	command > file	将输出重定向到 file。
+	command < file	将输入重定向到 file。
+	command >> file	将输出以追加的方式重定向到 file。
+	n > file	将文件描述符为 n 的文件重定向到 file。
+	n >> file	将文件描述符为 n 的文件以追加的方式重定向到 file。
+	n >& m	将输出文件 m 和 n 合并。
+	n <& m	将输入文件 m 和 n 合并。
+	<< tag	将开始标记 tag 和结束标记 tag 之间的内容作为输入。
+
+29、Here Document
+	Here Document 目前没有统一的翻译，这里暂译为”嵌入文档“。Here Document 是 Shell 中的一种特殊的重定向方式，它的基本的形式如下：
+	command << delimiter
+	    document
+	delimiter
+	它的作用是将两个 delimiter 之间的内容(document) 作为输入传递给 command。
+
+	QA:
+	wc -l << EOF
+    This is a simple lookup program
+    for good (and bad) restaurants
+    in Cape Town.
+	EOF
+
+
+30、/dev/null 文件
+	如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到 /dev/null：
+	$ command > /dev/null
+	/dev/null 是一个特殊的文件，写入到它的内容都会被丢弃；如果尝试从该文件读取内容，那么什么也读不到。但是 /dev/null 文件非常有用，将命令的输出重定向到它，会起到”禁止输出“的效果。
+	如果希望屏蔽 stdout 和 stderr，可以这样写：
+	复制纯文本新窗口
+	$ command > /dev/null 2>&1
+
+31、文件包含
+	Shell文件包含
+	. filename
+	或
+	source filename
