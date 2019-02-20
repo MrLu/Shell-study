@@ -1,10 +1,10 @@
 #! /bin/bash
 
 dir=$1
-nameExt=$2
 # open $dir
-oldext=.png #替换的文字
-newext=$nameExt.png #替换成的文字
+oldext=$2 #替换的文字
+newext=$3 #替换成的文字
+
 cd $dir #进入当前文件夹
 cout=0
 for file in $(ls ./ | grep .$oldext)
